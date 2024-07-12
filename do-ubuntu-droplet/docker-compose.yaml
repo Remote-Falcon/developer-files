@@ -1,0 +1,85 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - /home/mongo-volume:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+  plugins-api:
+    build: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
+    image: plugins-api
+    restart: always
+    ports:
+      - "8083:8083"
+      - "8003:8003"
+    environment:
+      - server.port=8083
+      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+      - server.servlet.context-path=/remote-falcon-plugins-api
+    depends_on:
+      - mongo
+  control-panel:
+    build: https://github.com/Remote-Falcon/remote-falcon-control-panel.git
+    image: control-panel
+    restart: always
+    ports:
+      - "8081:8081"
+      - "8001:8001"
+    environment:
+      - server.port=8081
+      - web.url=https://your_domain.com #Change "your_domain" to your real domain
+      - auto-validate-email=true
+      - jwt.user=123456 #Change this to a random value
+      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+      - github.pat=
+      - sendgrid.key=
+    depends_on:
+      - mongo
+  viewer:
+    build: https://github.com/Remote-Falcon/remote-falcon-viewer.git
+    image: viewer
+    restart: always
+    ports:
+      - "8082:8082"
+      - "8002:8002"
+    environment:
+      - server.port=8082
+      - jwt.viewer=123456 #Change this to a random value
+      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+    depends_on:
+      - mongo
+  gateway:
+    build: https://github.com/Remote-Falcon/remote-falcon-gateway.git
+    image: gateway
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    environment:
+      - server.port=8080
+      - services.control-panel.path=remote-falcon-control-panel
+      - services.control-panel.uri=https://your_domain.com/remote-falcon-control-panel #Change "your_domain" to your real domain
+      - services.viewer.path=remote-falcon-viewer
+      - services.viewer.uri=https://your_domain.com/remote-falcon-viewer #Change "your_domain" to your real domain
+    depends_on:
+      - control-panel
+      - viewer
+  ui:
+    build:
+      context: https://github.com/Remote-Falcon/remote-falcon-ui.git
+      args:
+        - HOST_ENV=prod
+        - VERSION=1.0.0
+        - REMOTE_FALCON_GATEWAY=https://your_domain.com/remote-falcon-gateway
+        - VIEWER_JWT_KEY=123456 #This should match the jwt.vieweer value in the viewer service
+        - DATADOG_CLIENT_TOKEN=
+        - GOOGLE_MAPS_KEY=
+        - PUBLIC_POSTHOG_KEY=
+    image: ui
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway

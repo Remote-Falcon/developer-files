@@ -1,0 +1,1 @@
+sudo cp -f default.conf /etc/nginx/conf.d/default.conf && sudo ufw reload && sudo systemctl stop nginx && sudo systemctl start nginx

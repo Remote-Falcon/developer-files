@@ -1,0 +1,80 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - /some/local/path/mongo-volume:/data/db #Update the path before the : to a valid path on your machine
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+  plugins-api:
+    build: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
+    restart: always
+    ports:
+      - "8083:8083"
+      - "8003:8003"
+    environment:
+      - server.port=8083
+      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+      - server.servlet.context-path=/remote-falcon-plugins-api
+    depends_on:
+      - mongo
+  control-panel:
+    build: https://github.com/Remote-Falcon/remote-falcon-control-panel.git
+    restart: always
+    ports:
+      - "8081:8081"
+      - "8001:8001"
+    environment:
+      - server.port=8081
+      - web.url=http://localhost:3000
+      - auto-validate-email=true
+      - jwt.user=123456
+      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+      - github.pat=
+      - sendgrid.key=
+    depends_on:
+      - mongo
+  viewer:
+    build: https://github.com/Remote-Falcon/remote-falcon-viewer.git
+    restart: always
+    ports:
+      - "8082:8082"
+      - "8002:8002"
+    environment:
+      - server.port=8082
+      - jwt.viewer=123456
+      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+    depends_on:
+      - mongo
+  gateway:
+    build: https://github.com/Remote-Falcon/remote-falcon-gateway.git
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    environment:
+      - server.port=8080
+      - services.control-panel.path=remote-falcon-control-panel
+      - services.control-panel.uri=http://host.docker.internal:8081/remote-falcon-control-panel
+      - services.viewer.path=remote-falcon-viewer
+      - services.viewer.uri=http://host.docker.internal:8082/remote-falcon-viewer
+    depends_on:
+      - control-panel
+      - viewer
+  ui:
+    build:
+      context: https://github.com/Remote-Falcon/remote-falcon-ui.git
+      args:
+        - HOST_ENV=local
+        - VERSION=local
+        - REMOTE_FALCON_GATEWAY=http://localhost:8080/remote-falcon-gateway
+        - VIEWER_JWT_KEY=123456
+        - DATADOG_CLIENT_TOKEN=
+        - GOOGLE_MAPS_KEY=
+        - PUBLIC_POSTHOG_KEY=
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
