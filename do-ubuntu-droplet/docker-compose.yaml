@@ -72,7 +72,7 @@ services:
       args:
         - HOST_ENV=prod
         - VERSION=1.0.0
-        - REMOTE_FALCON_GATEWAY=https://your_domain.com/remote-falcon-gateway
+        - REMOTE_FALCON_GATEWAY=https://your_domain.com/remote-falcon-gateway #Change "your_domain" to your real domain
         - VIEWER_JWT_KEY=123456 #This should match the jwt.vieweer value in the viewer service
         - DATADOG_CLIENT_TOKEN=
         - GOOGLE_MAPS_KEY=
