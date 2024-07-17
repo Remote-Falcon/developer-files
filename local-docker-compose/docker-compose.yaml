@@ -70,9 +70,9 @@ services:
         - VERSION=local
         - REMOTE_FALCON_GATEWAY=http://localhost:8080/remote-falcon-gateway
         - VIEWER_JWT_KEY=123456
-        - DATADOG_CLIENT_TOKEN=
         - GOOGLE_MAPS_KEY=
         - PUBLIC_POSTHOG_KEY=
+        - GA_TRACKING_ID=1
     restart: always
     ports:
       - "3000:3000"
