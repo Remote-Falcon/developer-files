@@ -11,8 +11,7 @@ services:
     build:
       context: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
       args:
-        - COLLECT_OTEL=false
-        - OTEL_COLLECTOR_ENDPOINT=
+        - OTEL_OPTS=
     restart: always
     ports:
       - "8083:8083"
@@ -27,8 +26,7 @@ services:
     build:
       context: https://github.com/Remote-Falcon/remote-falcon-control-panel.git
       args:
-        - COLLECT_OTEL=false
-        - OTEL_COLLECTOR_ENDPOINT=
+        - OTEL_OPTS=
     restart: always
     ports:
       - "8081:8081"
@@ -47,8 +45,7 @@ services:
     build:
       context: https://github.com/Remote-Falcon/remote-falcon-viewer.git
       args:
-        - COLLECT_OTEL=false
-        - OTEL_COLLECTOR_ENDPOINT=
+        - OTEL_OPTS=
     restart: always
     ports:
       - "8082:8082"
@@ -63,8 +60,7 @@ services:
     build:
       context: https://github.com/Remote-Falcon/remote-falcon-gateway.git
       args:
-        - COLLECT_OTEL=false
-        - OTEL_COLLECTOR_ENDPOINT=
+        - OTEL_OPTS=
     restart: always
     ports:
       - "8080:8080"
