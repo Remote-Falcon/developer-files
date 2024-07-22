@@ -8,7 +8,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
   plugins-api:
-    build: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
+    build:
+      context: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
+      args:
+        - COLLECT_OTEL=false
+        - OTEL_COLLECTOR_ENDPOINT=
     restart: always
     ports:
       - "8083:8083"
@@ -20,7 +24,11 @@ services:
     depends_on:
       - mongo
   control-panel:
-    build: https://github.com/Remote-Falcon/remote-falcon-control-panel.git
+    build:
+      context: https://github.com/Remote-Falcon/remote-falcon-control-panel.git
+      args:
+        - COLLECT_OTEL=false
+        - OTEL_COLLECTOR_ENDPOINT=
     restart: always
     ports:
       - "8081:8081"
@@ -36,7 +44,11 @@ services:
     depends_on:
       - mongo
   viewer:
-    build: https://github.com/Remote-Falcon/remote-falcon-viewer.git
+    build:
+      context: https://github.com/Remote-Falcon/remote-falcon-viewer.git
+      args:
+        - COLLECT_OTEL=false
+        - OTEL_COLLECTOR_ENDPOINT=
     restart: always
     ports:
       - "8082:8082"
@@ -48,7 +60,11 @@ services:
     depends_on:
       - mongo
   gateway:
-    build: https://github.com/Remote-Falcon/remote-falcon-gateway.git
+    build:
+      context: https://github.com/Remote-Falcon/remote-falcon-gateway.git
+      args:
+        - COLLECT_OTEL=false
+        - OTEL_COLLECTOR_ENDPOINT=
     restart: always
     ports:
       - "8080:8080"
