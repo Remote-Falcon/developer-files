@@ -41,6 +41,7 @@ services:
       - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
       - github.pat=
       - sendgrid.key=
+      - client.header=CF-Connecting-IP
     depends_on:
       - mongo
   viewer:
@@ -57,6 +58,7 @@ services:
       - server.port=8082
       - jwt.viewer=123456 #Change this to a random value
       - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+      - client.header=CF-Connecting-IP
     depends_on:
       - mongo
   ui:
