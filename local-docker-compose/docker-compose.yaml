@@ -64,8 +64,8 @@ services:
       args:
         - HOST_ENV=local
         - VERSION=local
-        - CONTROL_PANEL_API=http://localhost:8080/remote-falcon-control-panel
-        - VIEWER_API=http://localhost:8080/remote-falcon-viewer
+        - CONTROL_PANEL_API=http://localhost:8081/remote-falcon-control-panel
+        - VIEWER_API=http://localhost:8082/remote-falcon-viewer
         - VIEWER_JWT_KEY=123456
         - GOOGLE_MAPS_KEY=
         - PUBLIC_POSTHOG_KEY=
