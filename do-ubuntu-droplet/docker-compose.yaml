@@ -74,6 +74,7 @@ services:
         - PUBLIC_POSTHOG_KEY=
         - GA_TRACKING_ID=1
         - HOSTNAME_PARTS=2 #Change this to the number of parts in your hostname. For example, domain.com would be two parts ('domain' and 'com'), and sub.domain.com would be 3 parts ('sub', 'domain', and 'com')
+        - SOCIAL_META=<meta property='og:url' content='https://remotefalcon.com/'/><meta property='og:title' content='Remote Falcon'/><meta property='og:description' content='Create a custom website where viewers can request or vote for sequences to watch on your light show.'/><meta property='og:image' content='https://remotefalcon.com/jukebox.png'/>
     image: ui
     restart: always
     ports:

@@ -71,6 +71,7 @@ services:
         - PUBLIC_POSTHOG_KEY=
         - GA_TRACKING_ID=1
         - HOSTNAME_PARTS=1
+        - SOCIAL_META=
     restart: always
     ports:
       - "3000:3000"
