@@ -11,6 +11,7 @@ services:
     build:
       context: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
       args:
+        - MONGO_URI=
         - OTEL_OPTS=
     image: plugins-api
     restart: always
@@ -18,9 +19,7 @@ services:
       - "8083:8083"
       - "8003:8003"
     environment:
-      - server.port=8083
-      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
-      - server.servlet.context-path=/remote-falcon-plugins-api
+      - quarkus.http.port=8083
       - sequence-limit=200
     depends_on:
       - mongo
@@ -43,9 +42,11 @@ services:
       - github.pat=
       - sendgrid.key=
       - client.header=CF-Connecting-IP
-      - s3.endpoint=dummy
-      - s3.accessKey=dummy
-      - s3.secretKey=dummy
+      - s3.endpoint=http://localhost
+      - s3.accessKey=
+      - s3.secretKey=
+      - wattson.endpoint=
+      - wattson.key=
     depends_on:
       - mongo
   viewer:
