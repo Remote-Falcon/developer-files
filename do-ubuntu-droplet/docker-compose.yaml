@@ -34,19 +34,19 @@ services:
       - "8081:8081"
       - "8001:8001"
     environment:
-      - server.port=8081
-      - web.url=https://your_domain.com #Change "your_domain" to your real domain
-      - auto-validate-email=true
-      - jwt.user=123456 #Change this to a random value
-      - spring.data.mongodb.uri=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
-      - github.pat=
-      - sendgrid.key=
-      - client.header=CF-Connecting-IP
-      - s3.endpoint=http://localhost
-      - s3.accessKey=
-      - s3.secretKey=
-      - wattson.endpoint=
-      - wattson.key=
+      - SERVER_PORT=8081
+      - WEB_URL=https://your_domain.com #Change "your_domain" to your real domain
+      - AUTO_VALIDATE_EMAIL=true
+      - JWT_USER=123456 #Change this to a random value
+      - SPRING_DATA_MONGODB_URI=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
+      - GITHUB_PAT=
+      - SENDGRID_KEY=
+      - CLIENT_HEADER=CF-Connecting-IP
+      - S3_ENDPOINT=http://localhost
+      - S3_ACCESSKEY=
+      - S3_SECRETKEY=
+      - WATTSON_ENDPOINT=
+      - WATTSON_KEY=
     depends_on:
       - mongo
   viewer:
