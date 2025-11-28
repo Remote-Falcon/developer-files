@@ -11,7 +11,7 @@ services:
     build:
       context: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
       args:
-        - MONGO_URI=
+        - MONGO_URI=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
         - OTEL_OPTS=
     image: plugins-api
     restart: always
