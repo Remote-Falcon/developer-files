@@ -1,0 +1,41 @@
+services:
+  fpp:
+    container_name: rf-test-fpp
+    image: falconchristmas/fpp:9.5.3
+    hostname: rf-test-fpp
+    ports:
+      # Expose FPP web UI on a high port to avoid colliding with anything
+      # the host machine might already be running on :80 or :8080.
+      - "127.0.0.1:18080:80/tcp"
+    environment:
+      - TZ=UTC
+    cap_add:
+      - SYS_PTRACE
+      - SYS_NICE
+    networks:
+      - rf-test-net
+
+  mock-rf-api:
+    container_name: rf-test-mock-rf-api
+    image: php:8.3-cli
+    hostname: mock-rf-api
+    working_dir: /app
+    volumes:
+      - ./mock-rf-api:/app:ro
+      # Tests write route config + read request recordings via this volume.
+      # The harness scripts on the host create/clear these files between runs.
+      - ./.state:/state
+    environment:
+      - RF_MOCK_CONFIG=/state/config.json
+      - RF_MOCK_RECORDINGS=/state/recordings.json
+    command: ["php", "-S", "0.0.0.0:80", "/app/router.php"]
+    ports:
+      # Also expose the mock to the host so harness scripts can hit it
+      # directly for sanity checks (curl http://localhost:18081/q/health).
+      - "127.0.0.1:18081:80/tcp"
+    networks:
+      - rf-test-net
+
+networks:
+  rf-test-net:
+    name: rf-test-net
