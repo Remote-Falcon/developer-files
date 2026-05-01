@@ -19,11 +19,19 @@ if [ "${1-}" = "" ]; then
     exit 1
 fi
 
+if [ ! -f "$1" ]; then
+    echo "smoke script not found: $1" >&2
+    echo "(if you checked out a plugin branch that doesn't include tests/virtual-fpp/smoke.sh," >&2
+    echo " switch to a branch that has it, e.g. chore/virtual-fpp-smoke)" >&2
+    exit 1
+fi
+
 SMOKE="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 HARNESS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 if [ ! -x "$SMOKE" ]; then
-    echo "$SMOKE is not executable" >&2
+    echo "smoke script exists but is not executable: $SMOKE" >&2
+    echo "fix with: chmod +x $SMOKE" >&2
     exit 1
 fi
 
