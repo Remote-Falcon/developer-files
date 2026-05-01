@@ -1,0 +1,2 @@
+# Per-run state (mock RF API config + request recordings).
+.state/
