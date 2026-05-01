@@ -45,6 +45,18 @@ for i in $(seq 1 30); do
     sleep 1
 done
 
+# Skip FPP's first-run setup wizard so the UI is immediately navigable.
+# Without these flags, opening http://127.0.0.1:18080 lands on a "Finish
+# Setup" interstitial that has to be clicked through (and is flaky to
+# dismiss). Each spin-up boots a fresh FPP, so we set these every time.
+for key in initialSetup initialSetup-01 initialSetup-02; do
+    curl -sf -X PUT \
+        -H 'Content-Type: text/plain' \
+        --data '1' \
+        "http://127.0.0.1:18080/api/settings/${key}" >/dev/null
+done
+echo "First-run setup wizard bypassed (initialSetup flags set)."
+
 echo ""
 echo "Environment ready:"
 echo "  FPP web UI / API:    http://127.0.0.1:18080"
