@@ -9,10 +9,11 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
   plugins-api:
     build:
-      context: https://github.com/Remote-Falcon/remote-falcon-plugins-api.git
+      context: https://github.com/Remote-Falcon/remote-falcon-platform.git#main
+      dockerfile: apps/plugins-api/Dockerfile
       args:
         - MONGO_URI=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
-        - OTEL_OPTS=
+        - OTEL_URI=
     image: plugins-api
     restart: always
     ports:
@@ -25,9 +26,8 @@ services:
       - mongo
   control-panel:
     build:
-      context: https://github.com/Remote-Falcon/remote-falcon-control-panel.git
-      args:
-        - OTEL_OPTS=
+      context: https://github.com/Remote-Falcon/remote-falcon-platform.git#main
+      dockerfile: apps/control-panel/Dockerfile
     image: control-panel
     restart: always
     ports:
@@ -51,7 +51,8 @@ services:
       - mongo
   viewer:
     build:
-      context: https://github.com/Remote-Falcon/remote-falcon-viewer.git
+      context: https://github.com/Remote-Falcon/remote-falcon-platform.git#main
+      dockerfile: apps/viewer/Dockerfile
       args:
         - OTEL_URI=
         - MONGO_URI=mongodb://root:root@mongo:27017/remote-falcon?authSource=admin
@@ -67,7 +68,7 @@ services:
       - mongo
   ui:
     build:
-      context: https://github.com/Remote-Falcon/remote-falcon-ui.git
+      context: https://github.com/Remote-Falcon/remote-falcon-platform.git#main:apps/ui
       args:
         - HOST_ENV=prod
         - VERSION=1.0.0
